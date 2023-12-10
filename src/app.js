@@ -8,6 +8,6 @@ const app =  express()
 app.use(morgan('dev')) // morgan logger
 app.use(express.json())
 
-app.use(AuthRoutes)
+app.use('/api', AuthRoutes)
 
 export default app

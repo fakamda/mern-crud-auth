@@ -1,5 +1,11 @@
+import userModel from "../models/user.model.js"
+
 export const register = (req, res) => {
-    res.send('register')
+    const { email, password, username } = req.body
+
+    console.log(email, password, username)
+
+    res.send('registrando')
 }
 
 export const login = (req, res) => {
