@@ -28,9 +28,6 @@ export const register = async (req, res) => {
             
     
     } catch (error) {
-        if (error.code === 11000) { // MongoDB duplicate key error
-            return res.status(400).json({ message: 'Email or username already exists' });
-        }
         console.error(error);
         res.status(500).json({ message: error.message });
     }
@@ -59,12 +56,11 @@ export const login = async (req, res) => {
          })
             
     
-    } catch (error) {
-        if (error.code === 11000) { // MongoDB duplicate key error
-            return res.status(400).json({ message: 'Email or username already exists' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: error.message });
         }
-        console.error(error);
-        res.status(500).json({ message: error.message });
-    }
    
 }
+
+// export const 
