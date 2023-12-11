@@ -1,6 +1,6 @@
 import userModel from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { createAccessToken } from "../libs/jwt.js"
 
 export const register = async (req, res) => {
     const { email, password, username } = req.body
@@ -15,11 +15,8 @@ export const register = async (req, res) => {
         })
     
         const userSaved = await newUser.save()
-
-        jwt.sign({ id: userSaved._id }, 'secretkey', { expiresIn: '24h'}, (err, token) => {
-            if (err) console.log(err)
-            res.json({ token })
-        })
+        const token = await createAccessToken({ id: userSaved._id })
+        res.cookie('token', token)
 
         res.status(200).json({ 
             id: userSaved._id,
