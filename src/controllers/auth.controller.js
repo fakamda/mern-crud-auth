@@ -53,9 +53,9 @@ export const login = async (req, res) => {
         res.cookie('token', token)
 
         res.status(200).json({ 
-            id: userSaved._id,
-            username: userSaved.username,
-            email: userSaved.email
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email
          })
             
     
