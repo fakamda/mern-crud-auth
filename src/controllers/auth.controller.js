@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const register = async (req, res) => {
     const { email, password, username } = req.body
@@ -14,7 +15,20 @@ export const register = async (req, res) => {
         })
     
         const userSaved = await newUser.save()
-        res.status(200).json({ userSaved })
+
+        jwt.sign({ id: userSaved._id }, 'secretkey', { expiresIn: '24h'}, (err, token) => {
+            if (err) console.log(err)
+            res.json({ token })
+        })
+
+        res.status(200).json({ 
+            id: userSaved._id,
+            username: userSaved.username,
+            email: userSaved.email,
+            createdAt: userSaved.createdAt,
+            updatedAt: userSaved.updatedAt
+         })
+            
     
     } catch (error) {
         console.log(error)
