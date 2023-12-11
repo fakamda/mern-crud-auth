@@ -1,6 +1,7 @@
 import User from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
 import { createAccessToken } from "../libs/jwt.js"
+import userModel from "../models/user.model.js"
 
 export const register = async (req, res) => {
     const { email, password, username } = req.body
@@ -13,18 +14,16 @@ export const register = async (req, res) => {
             email,
             password: passwordHash
         })
-
-        console.log(newUser)
     
         const userSaved = await newUser.save()
         const token = await createAccessToken({ id: userSaved._id })
+
         res.cookie('token', token)
 
         res.status(200).json({ 
             id: userSaved._id,
             username: userSaved.username,
-            email: userSaved.email,
-
+            email: userSaved.email
          })
             
     
@@ -38,6 +37,34 @@ export const register = async (req, res) => {
    
 }
 
-export const login = (req, res) => {
-    res.send('login')
+export const login = async (req, res) => {
+    const { email, password } = req.body
+
+    try {
+        const userFound = await userModel.findOne({ email })
+        if(!userFound) res.status(400).json({ message: "Invalid credentials" })
+
+        const isMatch = await bcrypt.compare(password, userFound.password)
+
+        if(!isMatch) return res.status(400).json({ message: "Invalid credentials" })
+
+        const token = await createAccessToken({ id: userFound._id })
+
+        res.cookie('token', token)
+
+        res.status(200).json({ 
+            id: userSaved._id,
+            username: userSaved.username,
+            email: userSaved.email
+         })
+            
+    
+    } catch (error) {
+        if (error.code === 11000) { // MongoDB duplicate key error
+            return res.status(400).json({ message: 'Email or username already exists' });
+        }
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+   
 }
