@@ -2,12 +2,15 @@ import taskModel from "../models/user.model.js"
 
 
 export const getTasks = async (req, res) => {
-    const tasks = taskModel.find()
+    const tasks = taskModel.find({
+        user: req.user.id
+    }).populate('user')
+    
     res.json(tasks)
 }
 
 export const getTaskById = async (req, res) => {
-    const task = await taskModel.findById(req.params.id)
+    const task = await taskModel.findById(req.params.id).populate('user')
     if(!task) return res.status(404).json({ message: "not found" })
     res.json(task)
 }
@@ -29,7 +32,7 @@ export const createTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
     const task = await taskModel.findByIdAndDelete(req.params.id)
     if(!task) return res.status(404).json({ message: "not found" })
-    res.json(task)
+    return res.sendStatus(204)
 
 }
 
