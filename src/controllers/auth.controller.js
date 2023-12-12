@@ -67,5 +67,10 @@ export const logout = (req, res) => {
     res.cookie('token', "", { 
         expires: new Date(0) 
     })
+    
     return res.send("logout")
+}
+
+export const profile = async(req, res) => {
+    res.send('profile')
 }
