@@ -39,7 +39,7 @@ export const login = async (req, res) => {
 
     try {
         const userFound = await userModel.findOne({ email })
-        if(!userFound) res.status(400).json({ message: "Invalid credentials" })
+        if(!userFound) return res.status(400).json({ message: "Invalid credentials" })
 
         const isMatch = await bcrypt.compare(password, userFound.password)
 
@@ -63,4 +63,9 @@ export const login = async (req, res) => {
    
 }
 
-// export const 
+export const logout = (req, res) => {
+    res.cookie('token', "", { 
+        expires: new Date(0) 
+    })
+    return res.send("logout")
+}
