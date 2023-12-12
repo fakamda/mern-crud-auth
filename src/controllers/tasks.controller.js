@@ -18,7 +18,8 @@ export const createTask = async (req, res) => {
     const newTask = new taskModel({
         title, 
         description,
-        date
+        date,
+        user: req.user.id
     })
 
     const savedTask = await newTask.save()
