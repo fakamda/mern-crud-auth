@@ -1,4 +1,4 @@
-import taskModel from "../models/user.model.js"
+import taskModel from "../models/tasks.model.js"
 
 
 export const getTasks = async (req, res) => {
@@ -16,17 +16,24 @@ export const getTaskById = async (req, res) => {
 }
 
 export const createTask = async (req, res) => {
-    const { title, description, date } = req.body
-
-    const newTask = new taskModel({
-        title, 
-        description,
-        date,
-        user: req.user.id
-    })
-
-    const savedTask = await newTask.save()
-    res.json(savedTask)
+    try {
+        console.log("Request Body:", req.body);
+        console.log("User ID:", req.user.id);
+        const { title, description, date } = req.body
+    
+        const newTask = new taskModel({
+            title, 
+            description,
+            date,
+            user: req.user.id
+        })
+    
+        const savedTask = await newTask.save()
+        res.json(savedTask)
+    } catch (error) {
+        console.log(error)
+    }
+   
 }
 
 export const deleteTask = async (req, res) => {
