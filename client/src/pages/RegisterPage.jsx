@@ -20,11 +20,11 @@ function RegisterPage() {
   return (
     <div className='bg-zinc-800 max-w-md p-10 rounded-md '>
         {
-        registerErrors.map((error, i) => {
+        registerErrors.map((error, i) => (
                 <div key={i} className='bg-red-700 text-white h-20'>
                     {error}
                 </div>
-            })
+            ))
         }
       <form onSubmit={onSubmit}>
         <input
