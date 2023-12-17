@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const registerSchema = z.object({
   username: z.string({ required_error: 'Username is Required' }),
   email: z
-    .string({ required_error: 'Email is required' })
+    .string({ required_error: 'Email is not valid' })
     .email({ message: 'Invalid email' }),
   password: z
     .string({ required_error: 'Password is required' })
@@ -12,7 +12,7 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
   email: z
-    .string({ required_error: 'Email is required' })
+    .string({ required_error: 'Email is not valid required' })
     .email({ message: 'Invalid email' }),
   password: z
     .string({ required_error: 'Password is required' })
