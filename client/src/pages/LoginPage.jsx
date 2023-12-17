@@ -5,7 +5,7 @@ function LoginPage() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
 
-  const { signin } = useAuth()
+  const { signin, errors: signinErrors } = useAuth()
 
   const onSubmit = handleSubmit((data) => {
     signin(data)
@@ -14,6 +14,13 @@ function LoginPage() {
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
       <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+      {
+        signinErrors.map((error, i) => (
+                <div key={i} className='bg-red-700 text-white h-20'>
+                    {error}
+                </div>
+            ))
+        }
         <h1 className='text-2xl font-bold'>Login</h1>
         <form onSubmit={onSubmit}>
           <input
