@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const signup = async (user) => {
 
@@ -56,26 +57,37 @@ export const AuthProvider = ({ children }) => {
     }, [errors])
 
     useEffect(() => {
-        const cookies = Cookies.get()
-        if(cookies.token) {
-            try {
-                const res = verifyTokenRequest(cookies.token)
-
-                if(!res.data) setIsAuthenticated(false)
-                isAuthenticated(true)
-                setUser(res.data)
-                
-            } catch (error) {
+       async function checkLogin () {
+            const cookies = Cookies.get()
+            if(!cookies.token) {
                 setIsAuthenticated(false)
-                setUser(null)
+                setLoading(false)
+                return setUser(null)
             }
-           
-        }
+                try {
+                    const res = await verifyTokenRequest(cookies.token)
+    
+                    if(!res.data) {
+                        setIsAuthenticated(false)
+                        setLoading(false)
+                        return
+                    }
+                    setIsAuthenticated(true)
+                    setUser(res.data)
+                    setLoading(false)
+    
+                } catch (error) {
+                    setIsAuthenticated(false)
+                    setUser(null)
+                    setLoading(false)
+                }
+            }
+        checkLogin()
     },[])
 
 
     return (
-        <AuthContext.Provider value={{ signup, signin, user, isAuthenticated, errors }}>
+        <AuthContext.Provider value={{ signup, signin, user, isAuthenticated, errors, loading }}>
             { children }
         </AuthContext.Provider>
     )
