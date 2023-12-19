@@ -17,7 +17,8 @@ function LoginPage() {
 
   useEffect(()=> {
     if(isAuthenticated) navigate("/tasks")
-  },[isAuthenticated])
+  }, 
+[isAuthenticated])
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
