@@ -2,18 +2,28 @@ import taskModel from "../models/tasks.model.js"
 
 
 export const getTasks = async (req, res) => {
-    const tasks = taskModel.find({
-        user: req.user.id
-    }).populate('user')
-    
-    res.json(tasks)
+    try {
+        const tasks = taskModel.find({
+            user: req.user.id
+        }).populate('user')
+        
+       return res.status(200).json(tasks)
+    } catch (error) {
+       return res.status(500).json({ message: 'Tasks Not Found' })
+    }
+  
 }
 
 export const getTaskById = async (req, res) => {
-    const task = await taskModel.findById(req.params.id).populate('user')
-    if(!task) return res.status(404).json({ message: "not found" })
-    res.json(task)
+    try {
+        const task = await taskModel.findById(req.params.id).populate('user')
+        if(!task) return res.status(404).json({ message: "not found" })
+        return res.status(200).json(task)
+    } catch (error) {
+       return  res.status(500).json({ message: 'task not found' })
+    }
 }
+    
 
 export const createTask = async (req, res) => {
     try {
@@ -29,22 +39,32 @@ export const createTask = async (req, res) => {
         })
     
         const savedTask = await newTask.save()
-        res.json(savedTask)
+        return res.json(savedTask)
     } catch (error) {
-        console.log(error)
+        return res.statu(500).json({ message: 'Server error' })
     }
    
 }
 
 export const deleteTask = async (req, res) => {
-    const task = await taskModel.findByIdAndDelete(req.params.id)
-    if(!task) return res.status(404).json({ message: "not found" })
-    return res.sendStatus(204)
+    try {
+        const task = await taskModel.findByIdAndDelete(req.params.id)
+        if(!task) return res.status(404).json({ message: "not found" })
+        return res.sendStatus(204)
+    } catch (error) {
+        return res.status(500).json({ message: "task not found" })
+    }
+    
 
 }
 
 export const uptdateTask = async (req, res) => {
-    const task = await taskModel.findByIdAndUpdate(req.params.id, req.body , { new : true })
-    if(!task) return res.status(404).json({ message: "not found" })
-    res.json(task)
+    try {
+        const task = await taskModel.findByIdAndUpdate(req.params.id, req.body , { new : true })
+        if(!task) return res.status(404).json({ message: "not found" })
+        return res.json(task)
+    } catch (error) {
+       return res.status(500).json({ message: 'task not found' })
+    }
+    
 }
