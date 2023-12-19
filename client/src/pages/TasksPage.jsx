@@ -1,25 +1,23 @@
-import { useEffect } from 'react'
-import { useTasks } from '../context/TasksContext'
+import { useEffect } from "react";
+import { useTasks } from "../context/TasksContext";
+import TaskCard from "../components/TaskCard";
 
 function TasksPage() {
-  const { getTasks, tasks } = useTasks()
-  
-  useEffect(()=> {
-    getTasks()
-  }, [])
+  const { getTasks, tasks } = useTasks();
 
-  if(tasks.lenght === 0) return (<h2>No tasks</h2>)
-  
-  return <div >
-    {
-      tasks.map(task=>(
-        <div key={task._id}>
-          <h3>{task.title}</h3>
-          <p>{task.description}</p>
-        </div>
-      ))
-    }
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  if (tasks.lenght === 0) return <h2>No tasks</h2>;
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {tasks.map((task) => (
+        <TaskCard task={task} key={task._id} />
+      ))}
     </div>
+  );
 }
 
-export default TasksPage
+export default TasksPage;
