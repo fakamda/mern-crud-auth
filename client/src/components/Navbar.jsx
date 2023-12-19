@@ -5,7 +5,7 @@ function Navbar() {
   const { isAuthenticated } = useAuth();
   return (
     <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10">
-      <Link to="/">
+      <Link to={isAuthenticated ? '/tasks' : "/"}>
         <h2 className="text-2xl font-bold">Task Manager</h2>
       </Link>
       <ul className="flex gap-x-2">
